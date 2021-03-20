@@ -27,7 +27,7 @@ top_movements=pd.read_csv("top_movements.csv")
 
 #----------------------------------------------Dropdowns, Slicer and Radio  -----------------------------------------------------------------
 
-country_options = [dict(label="Country: "+str(country), value=country) for country in clean_demo['Country'].unique()]
+country_options = [dict(label="Country: "+str(country), value=country) for country in ["Total"]+demo['Country'].unique()]
 
 year_options = [dict(label=year, value=year) for year in demo["Year"].unique()]
 
