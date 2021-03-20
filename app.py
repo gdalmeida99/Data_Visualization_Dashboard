@@ -27,7 +27,7 @@ top_movements=pd.read_csv("top_movements.csv")
 
 #----------------------------------------------Dropdowns, Slicer and Radio  -----------------------------------------------------------------
 
-country_options = [dict(label="Country: "+str(country), value=country) for country in ["Total"]+demo['Country'].unique()]
+country_options = [dict(label="Country: "+str(country), value=country) for country in ["Total"]+list(set(list(clean_demo['Country'].unique())))]
 
 year_options = [dict(label=year, value=year) for year in demo["Year"].unique()]
 
@@ -59,7 +59,7 @@ choice2= dcc.Dropdown(id='choice2', multi=True)
 dropdown_country = dcc.Dropdown(
         id='country_drop',
         options=country_options,
-        value='Afghanistan',
+        value='Total',
         multi=False
     )
 
