@@ -254,26 +254,27 @@ def set_sub_choice_value(available_options):
 
 def plots_2 (segment, choice1, choice2, year):
 
-    if segment=="Origin":
+    if segment == "Origin":
     #Sankey Graph Origin
-        if choice1=="Continent":
+        if choice1 == "Continent":
             df_flows = mov[(mov["Year"] == year) & (
                 (mov["Origin Continent"] != 'Unknown') & (mov["Asylum Continent"] != 'Unknown'))].groupby(
             ["Origin Continent", "Asylum Continent"])["Refugees"].sum().sort_values(ascending=False).to_dict()
 
-        elif choice1== "Region":
+        elif choice1 == "Region":
             df_flows = mov[(mov["Year"] == year) & (
                 (mov["Origin Region"] != 'Unknown') & (mov["Asylum Region"] != 'Unknown'))].groupby(
             ["Origin Region", "Asylum Region"])["Refugees"].sum().sort_values(ascending=False).to_dict()
 
-        origin = []
-        destiny = []
 
+        origin=[]
+        destiny=[]
+        values=[]
         for i, v in enumerate(df_flows.keys()):
             if v[0] in choice2:
                 origin.append(v[0])
                 destiny.append(v[1])
-
+                values.append(df_flows[(v[0], v[1])])
 
         indices_origin = {}
         for index, value in enumerate(origin):
@@ -296,10 +297,11 @@ def plots_2 (segment, choice1, choice2, year):
         link = dict(
          source = [indices_origin[i] for i in origin],
          target = [indices_destiny[i]+len(origin) for i in destiny],
-         value = [i for i in df_flows.values()],
-         color=['steelblue', "dodgerblue", "silver", "skyblue", "lightsteelblue", "dodgerblue", "lightpink", "plum",
-             "silver", "thistle", "lightgrey", "salmon"]
+         value = values,
+          color=['steelblue', "dodgerblue", "silver", "skyblue", "lightsteelblue", "dodgerblue", "lightpink", "plum",
+              "silver", "thistle", "lightgrey", "salmon"]
     ))]
+
         return go.Figure(data, layout={"paper_bgcolor":'#f9f9f9'})
 
 
@@ -319,13 +321,13 @@ def plots_2 (segment, choice1, choice2, year):
 
         origin = []
         destiny = []
+        values = []
 
         for i, v in enumerate(df_flows.keys()):
             if v[1] in choice2:
                 origin.append(v[0])
                 destiny.append(v[1])
-
-        destiny = [i for i in destiny if i in choice2]
+                values.append(df_flows[(v[0], v[1])])
 
         indices_origin = {}
         for index, value in enumerate(origin ):
@@ -337,7 +339,7 @@ def plots_2 (segment, choice1, choice2, year):
             if value not in indices_destiny.keys():
                 indices_destiny [value] = index
 
-        data  = [go.Sankey(
+        data= [go.Sankey(
             node=dict(
                 pad=30,
                 thickness=20,
@@ -348,12 +350,14 @@ def plots_2 (segment, choice1, choice2, year):
             link=dict(
                 source=[indices_origin[i] for i in origin ],
                 target=[indices_destiny[i] + len(origin ) for i in destiny ],
-                value=[i for i in df_flows .values()],
-                color=['steelblue', "dodgerblue", "silver", "skyblue", "lightsteelblue", "dodgerblue", "lightpink", "plum",
-                   "silver", "thistle", "lightgrey", "salmon"]
+                value=values,
+
+                 color=['steelblue', "dodgerblue", "silver", "skyblue", "lightsteelblue", "dodgerblue", "lightpink", "plum",
+                    "silver", "thistle", "lightgrey", "salmon"]
             ))]
 
         return go.Figure(data, layout={"paper_bgcolor":'#f9f9f9'})
+
 
 
 
