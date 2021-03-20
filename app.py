@@ -15,7 +15,7 @@ import plotly.express as px
 mov = pd.read_csv("mov.csv")
 
 #-------------Demographic--------------------------------#
-demo = pd.read_excel("demo2.xlsx")
+demo = pd.read_excel("demo2.xlsx", engine='openpyxl')
 clean_demo = pd.read_csv("clean_demo.csv")
 
 demo_sex =pd.read_csv("demo_sex.csv")
