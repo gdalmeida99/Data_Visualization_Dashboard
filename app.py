@@ -25,8 +25,8 @@ demo_age =pd.read_csv("demo_age.csv")
 top_movements=pd.read_csv("top_movements.csv")
 
 
-#----------------------------------------------Dropdowns, Slicer and Radio  -----------------------------------------------------------------
-
+#------------------------------------------------------------------------Dropdowns, Slicers and Radios  -----------------------------------------------------------------
+#Defining the different options for all the components to be used
 country_options = [dict(label="Country: "+str(country), value=country) for country in ["Total"]+list(clean_demo['Country'].unique()[:-1])]
 
 year_options = [dict(label=year, value=year) for year in demo["Year"].unique()]
@@ -41,6 +41,7 @@ sex_group_options=[dict(label=group, value=group) for group in ["By Gender", "By
 
 top_options_flows= [dict(label="Top "+str(top)+" Movements", value=top) for top in np.arange(1,11)]
 
+#Creating all the dropdowns/ratios/sliders
 
 all_options = {
     'Continent': [i for i in mov["Asylum Continent"].unique() if i!= "Unknown"],
@@ -54,7 +55,6 @@ choice1= dcc.RadioItems(
     )
 
 choice2= dcc.Dropdown(id='choice2', multi=True)
-
 
 dropdown_country = dcc.Dropdown(
         id='country_drop',
@@ -119,7 +119,6 @@ slider_year_2 = dcc.Slider(
         included=False
     )
 
-
 slider_year_3 = dcc.Slider(
         id='year_slider_3',
         min=2001,
@@ -140,8 +139,6 @@ slider_year_4 = dcc.Slider(
         included=False
     )
 
-
-
 slider_range_year = dcc.RangeSlider(
         id='year_range_slider',
         min=demo['Year'].min(),
@@ -152,7 +149,7 @@ slider_range_year = dcc.RangeSlider(
     )
 
 
-#---------------------------------------------------------APP----------------------------------------------------------
+#--------------------------------------------------------------------------------APP--------------------------------------------------------------------------------------------
 
 app = dash.Dash(__name__, external_stylesheets='')
 
@@ -169,6 +166,10 @@ app.layout = html.Div([html.Div([html.H2("Refugees in the 21st Century: The Tale
 
 ])
 #------------------------------------------------- -------------------------------------------------------------------
+
+#Regarding the First tab: "Refugees, from where and to where?"
+
+#Callback to receive the input on the year, the "Origin vs Asylum" choice and the top N countries to be visualized. Then, it's returned the Choropleth and the Bar graphs.
 @app.callback(
     [Output("choropleth", "figure"),
         Output("bar_top", "figure")
@@ -180,12 +181,17 @@ app.layout = html.Div([html.Div([html.H2("Refugees in the 21st Century: The Tale
 
 )
 
+#Function to produce the plots for this first tab
 def plots_1 (year, top, segment):
-
-    #Origin/Asylum Map  top_movements
+    """This function receives the inputs from the previous callback (year, top N countries and Origin/Asylum and returns the 2 graphs, accordingly."""
+    
+    #Origin/Asylum Map 
+    
+    #Preparing the data to be passed to the graphs. We choose the right year and if we want the Origin or the Asylum countries, then we convert our values to Log.
     df_movs= top_movements[top_movements["Year_"+str(segment)]==year]
     log_values= np.log(df_movs["Refugees_"+str(segment)])
-
+    
+    #Creating the choropleth
     data_choropleth= dict(type="choropleth",
                                   locations=df_movs["Country of "+(str(segment).lower())+" (ISO)"],
                                   z=log_values,
@@ -196,11 +202,13 @@ def plots_1 (year, top, segment):
                                   name='',
                                 colorbar={'title': '(Log Scale)'}
                                   )
+    
+    #Adjusting the layout
     layout_choropleth = dict(geo=dict(scope='world',
                                              projection=dict(type='equirectangular'),
                                              lakecolor='white',
                                              landcolor='white',
-                                             showocean=True,  # default = False
+                                             showocean=True, 
                                              oceancolor='azure',
                                              bgcolor='#f9f9f9'
                                              ),
@@ -210,32 +218,35 @@ def plots_1 (year, top, segment):
                                     )
 
 
-    #Top Bar Plots
-
+    #Bar Plot with the Top countries
+    
+    #Selecting our data, according with the year chosen and the Origin/Asylum criteria, and preparing it to be fed to the graph
     top_movs= df_movs[df_movs["Year_"+str(segment)]==year].sort_values(by="Refugees_"+str(segment), ascending=False).head(top)
     top_movs["Country of "+(str(segment).lower())]=top_movs["Country of "+(str(segment).lower())].apply(lambda x: x+"  ")
     countries=top_movs["Country of "+(str(segment).lower())].values.tolist()
     values=top_movs["Refugees_"+str(segment)].values.tolist()
-
+    
+    #Defining the data for the bar graph
     data_top= dict(type="bar", x=values[::-1], y=countries[::-1], orientation="h", marker = { "color" : "steelblue"}
                          )
+    #Adjusting the layout
     layout_top = dict(xaxis=dict(title='Number of Refugees'),
                       paper_bgcolor='#f9f9f9',
                       plot_bgcolor='#f9f9f9'
                      )
 
-
     return go.Figure(data=data_choropleth, layout=layout_choropleth), \
            go.Figure(data=data_top, layout=layout_top)
 
 
-
+#The following two callbacks and the correspondent functions are regarding the Tab 2's selection of Continent/Region and then subsequently and automatically, choosing which ones.
 @app.callback(
     Output('choice2', 'options'),
     Input('choice1', 'value'))
 
 def set_sub_choice_options(selected_country):
     return [{'label': i, 'value': i} for i in all_options[selected_country]]
+
 
 @app.callback(
     Output('choice2', 'value'),
@@ -245,6 +256,7 @@ def set_sub_choice_value(available_options):
     return available_options[0]['value']
 
 
+#This callback represents the Tab 2 page: choosing Origin/Asylum, Continent/Region and which ones, and a year, outputs a Sankey graph
 @app.callback(
     Output("sankey", "figure"),
     [Input("segment_drop_2", "value"),
@@ -252,10 +264,13 @@ def set_sub_choice_value(available_options):
     Input('choice2', 'value'),
     Input("year_slider_3", "value")])
 
+#Function to plot Tab 2's content
 def plots_2 (segment, choice1, choice2, year):
-
+    """This fucntion receives the inputs of the previous callback and returns a Sankey graph accordingly."""
+    
+    #Assessing the first input given
     if segment == "Origin":
-    #Sankey Graph Origin
+        #Assessing the second input given and preparing the data accordingly
         if choice1 == "Continent":
             df_flows = mov[(mov["Year"] == year) & (
                 (mov["Origin Continent"] != 'Unknown') & (mov["Asylum Continent"] != 'Unknown'))].groupby(
@@ -266,11 +281,13 @@ def plots_2 (segment, choice1, choice2, year):
                 (mov["Origin Region"] != 'Unknown') & (mov["Asylum Region"] != 'Unknown'))].groupby(
             ["Origin Region", "Asylum Region"])["Refugees"].sum().sort_values(ascending=False).to_dict()
 
-
+        #Preparing the necessary auxiliar material to plot the Sankey in an easier way
         origin=[]
         destiny=[]
         values=[]
+        
         for i, v in enumerate(df_flows.keys()):
+            #Making sure the third input is respected
             if v[0] in choice2:
                 origin.append(v[0])
                 destiny.append(v[1])
@@ -285,7 +302,8 @@ def plots_2 (segment, choice1, choice2, year):
         for index, value in enumerate(destiny):
             if value not in indices_destiny.keys():
                 indices_destiny[value] = index
-
+    
+        #Defining the Sankey graph
         data=[go.Sankey(
         node = dict(
          pad = 30,
@@ -305,14 +323,12 @@ def plots_2 (segment, choice1, choice2, year):
         return go.Figure(data, layout={"paper_bgcolor":'#f9f9f9'})
 
 
-    # Sankey Graph Asylum
+    #Repeting the process for the Asylum option
     if segment=="Asylum":
-
         if choice1 == "Continent":
             df_flows= mov[(mov["Year"] == year) & (
                 (mov["Origin Continent"] != 'Unknown') & (mov["Asylum Continent"] != 'Unknown'))].groupby(
             ["Origin Continent", "Asylum Continent"])["Refugees"].sum().sort_values(ascending=False).to_dict()
-
 
         elif choice1 == "Region":
             df_flows = mov[(mov["Year"] == year) & (
@@ -359,7 +375,7 @@ def plots_2 (segment, choice1, choice2, year):
         return go.Figure(data, layout={"paper_bgcolor":'#f9f9f9'})
 
 
-
+#Callback for the Tab 3. Inputs are the year and country choice, on the left side; and the year range and Sex/Age Group on the right one. Allows to output the sunburst and the line plot.
 
 @app.callback(
         [Output("sunburst_demo", "figure"),
@@ -374,20 +390,24 @@ def plots_2 (segment, choice1, choice2, year):
 
 )
 
+#Function to plot the Tab 3's content
 def plots_3 (year, country, years, sex_group):
-    # Sunburst_Demographic
+    """This function receives as input the ones in the previous callback and returns a Sunburst and a Line graphs, accordingly."""
+    
+    #Defining the data to contitute the sunburst, according with the inputs given.
     fig_sun=px.sunburst(data_frame=clean_demo[(clean_demo["Year"] == year) & (clean_demo["Country"] == country)],
                 path=['Children/Adults', "Sex"],
                 values='Population',
                 hover_data={"Population": True, "Children/Adults": False, "Sex": False},
                color_discrete_sequence=["steelblue", "lightblue"]
              )
-
+    
+    #Updating the layout
     fig_sun.update_traces(textinfo="label+percent entry", hoverinfo='none')
     fig_sun.update_layout(paper_bgcolor='#f9f9f9')
 
-    #Time Series Demographic
-
+    
+    #Defining the data to be used on the Time Series plot, according to the user's choices
     if sex_group=="By Gender":
         fig_line = px.line(x="Year",
                   y=demo_sex[(demo_sex["Country"] == country) &(demo_sex['Year']>=years[0]) & (demo_sex["Year"]<=years[1])]["Population"],
@@ -418,10 +438,12 @@ def plots_3 (year, country, years, sex_group):
             go.Figure(fig_line)
 
 
+#Callback to make use of the tabs component
 @app.callback (Output('tabs_content', 'children'),
               [Input('tabs', 'value')])
 
-def render_content(tab):
+def show_content(tab):
+    """"This function receives as input the user's tab choice and shows the correspondent content."""
     if tab == 'tab-1':
         return html.Div([
                          html.Div([html.Div([html.H4("Do you want to analyse the countries of origin or asylum?")], className="smallbox"),
