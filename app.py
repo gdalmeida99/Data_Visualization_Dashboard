@@ -437,7 +437,7 @@ def plots_3(year, country, years, sex_group):
                                paper_bgcolor='#eff5f5',
                                yaxis_range=[0,10000000])
         
-        fig_line.update_xaxes(type='category')
+        fig_line.update_xaxes(type='category', tickangle=-65)
 
     elif sex_group == "By Age Group":
         fig_line = px.line(x="Year",
@@ -454,7 +454,7 @@ def plots_3(year, country, years, sex_group):
                                paper_bgcolor='#eff5f5',
                                yaxis_range=[0,10000000])
         
-        fig_line.update_xaxes(type='category')
+        fig_line.update_xaxes(type='category', tickangle=-65)
 
     return go.Figure(fig_sun), \
            go.Figure(fig_line)
