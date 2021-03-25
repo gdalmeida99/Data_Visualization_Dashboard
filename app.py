@@ -8,20 +8,20 @@ import plotly.graph_objs as go
 import plotly.express as px
 
 # -------------------------------------------------Importing Data-------------------------------------------------------------
-
+path = 'https://github.com/gdalmeida99/a_tale_of_a_never_ending_journey/tree/main/datasets/'
 
 # ------Movements------------------------------------------------
-mov = pd.read_csv("mov.csv")
+mov = pd.read_csv(path + "mov.csv")
 
 # -------------Demographic--------------------------------#
-demo = pd.read_excel("demo2.xlsx", engine='openpyxl')
-clean_demo = pd.read_csv("clean_demo.csv")
+demo = pd.read_excel(path + "demo2.xlsx", engine='openpyxl')
+clean_demo = pd.read_csv(path + "clean_demo.csv")
 
-demo_sex = pd.read_csv("demo_sex.csv")
-demo_age = pd.read_csv("demo_age.csv")
+demo_sex = pd.read_csv(path + "demo_sex.csv")
+demo_age = pd.read_csv(path + "demo_age.csv")
 
 # --------Top Countries --------------------
-top_movements = pd.read_csv("top_movements.csv")
+top_movements = pd.read_csv(path + "top_movements.csv")
 
 # ------------------------------------------------------------------------Dropdowns, Slicers and Radios  -----------------------------------------------------------------
 # Defining the different options for all the components to be used
