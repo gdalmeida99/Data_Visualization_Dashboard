@@ -1,13 +1,23 @@
 body {
-    background-color: #FFFFFF;
+    background-color: #eff5f5;
 }
+
+.rc-slider-track {
+  background-color: silver;
+}
+
+.rc-slider-handle {
+  background-color: white;
+  border-color: steelblue;
+}
+
 
 .box {
   border-radius: 5px;
-  background-color: #f9f9f9;
+  background-color: #eff5f5;
   margin: 10px;
   padding: 15px;
-  box-shadow: 2px 2px 2px lightgrey;
+  box-shadow: 2px 2px 2px steelblue;
 }
 
 .smallbox {
@@ -15,12 +25,20 @@ body {
   background-color: #f9f9f9;
   margin: 10px;
   padding: 1px;
-  box-shadow: 2px 2px 2px lightgrey;
+  box-shadow: 2px 2px 2px steelblue;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h2 {
+  text-align: center;
+  background-color: #eff5f5;
+  font-family: Verdana;
+}
+
+h1, h3, h4, h5, h6 {
   text-align: center;
   background-color: #f9f9f9;
+  font-family: Verdana;
+  font-weight:normal;
 }
 
 .examples {
@@ -32,26 +50,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 100%;
 }
 
-button {
-  display: inline-block;
-  height: 38px;
-  padding: 0 30px;
-  color: #555;
-  text-align: center;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 38px;
-  letter-spacing: .1rem;
-  text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-  border: 1px solid #bbb;
-  cursor: pointer;
-  box-sizing: border-box;
-  margin-left: 70px;
-  }
+
 
 @media (max-width: 900px) {
   .row {
