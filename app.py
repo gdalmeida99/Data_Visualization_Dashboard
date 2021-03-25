@@ -150,7 +150,7 @@ slider_range_year = dcc.RangeSlider(
 
 tab_style = {
     'fontWeight': 'bold',
-    "font-family": "Verdana",
+    "font-family": "Cursive",
 }
 
 tab_selected_style = {
@@ -160,7 +160,7 @@ tab_selected_style = {
     'borderLeft': '2px solid steelblue',
     'borderRight': '2px solid steelblue',
     'color': 'white',
-    "font-family": "Verdana",
+    "font-family": "Cursive",
     'fontWeight': 'bold',
 }
 
