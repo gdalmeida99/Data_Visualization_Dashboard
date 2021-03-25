@@ -8,7 +8,7 @@ import plotly.graph_objs as go
 import plotly.express as px
 
 # -------------------------------------------------Importing Data-------------------------------------------------------------
-path = 'https://github.com/gdalmeida99/a_tale_of_a_never_ending_journey/tree/main/datasets/'
+path = 'https://raw.githubusercontent.com/gdalmeida99/a_tale_of_a_never_ending_journey/master/datasets/'
 
 # ------Movements------------------------------------------------
 mov = pd.read_csv(path + "mov.csv")
