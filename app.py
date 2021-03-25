@@ -433,10 +433,17 @@ def plots_3(year, country, years, sex_group):
                                    },
                            color_discrete_sequence=["steelblue", "darkturquoise", "grey"]
                            )
-        fig_line.update_layout(plot_bgcolor='#eff5f5',
+         
+        if country=="Total":
+            fig_line.update_layout(plot_bgcolor='#eff5f5',
                                paper_bgcolor='#eff5f5',
-                               yaxis_range=[0,10000000])
-        
+                               yaxis_range=[0,10000000])  
+        else:
+            fig_line.update_layout(plot_bgcolor='#eff5f5',
+                                   paper_bgcolor='#eff5f5',
+                                   )
+            fig_line.update_yaxes(rangemode="tozero")  
+               
         fig_line.update_xaxes(type='category', tickangle=-65)
 
     elif sex_group == "By Age Group":
@@ -450,10 +457,17 @@ def plots_3(year, country, years, sex_group):
                                    },
                            color_discrete_sequence=["steelblue", "darkturquoise", "grey"]
                            )
-        fig_line.update_layout(plot_bgcolor='#eff5f5',
-                               paper_bgcolor='#eff5f5',
-                               yaxis_range=[0,10000000])
         
+        if country=="Total":
+            fig_line.update_layout(plot_bgcolor='#eff5f5',
+                               paper_bgcolor='#eff5f5',
+                               yaxis_range=[0,10000000])  
+        else:
+            fig_line.update_layout(plot_bgcolor='#eff5f5',
+                                   paper_bgcolor='#eff5f5',
+                                   )
+            fig_line.update_yaxes(rangemode="tozero")  
+               
         fig_line.update_xaxes(type='category', tickangle=-65)
 
     return go.Figure(fig_sun), \
