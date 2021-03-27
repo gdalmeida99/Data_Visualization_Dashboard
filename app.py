@@ -431,7 +431,7 @@ def plots_3(year, country, years, sex_group):
                            color="Sex",
                            labels={"y": "Number of Refugees"
                                    },
-                           color_discrete_sequence=["steelblue", "darkturquoise", "grey"]
+                           color_discrete_map={"Male":"steelblue", "Female":"darkturquoise", "Unknown":"grey"}
                            )
          
         if country=="Total":
@@ -455,7 +455,7 @@ def plots_3(year, country, years, sex_group):
                                    demo_age["Year"] <= years[1])],
                            labels={"y": "Number of Refugees",
                                    },
-                           color_discrete_sequence=["steelblue", "darkturquoise", "grey"]
+                           color_discrete_map={"Adults":"steelblue", "Children":"darkturquoise", "Unknown":"grey"}
                            )
         
         if country=="Total":
