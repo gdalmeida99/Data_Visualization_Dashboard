@@ -334,8 +334,13 @@ def plots_2(segment, choice1, choice2, year):
                 target=[indices_destiny[i] + len(origin) for i in destiny],
                 value=values,
                 color=['steelblue', "dodgerblue", "silver", "skyblue", "lightsteelblue", "dodgerblue", "lightpink",
-                       "plum",
-                       "silver", "thistle", "lightgrey", "salmon"]
+                       "plum", "silver", "thistle", "lightgrey", "salmon"]+['steelblue', "dodgerblue", "silver", "skyblue", "lightsteelblue", "dodgerblue", "lightpink",
+                       "plum", "silver", "thistle", "lightgrey", "salmon"]+['steelblue', "dodgerblue", "silver", "skyblue", "lightsteelblue", "dodgerblue", "lightpink",
+                       "plum", "silver", "thistle", "lightgrey", "salmon"]+['steelblue', "dodgerblue", "silver", "skyblue", "lightsteelblue", "dodgerblue", "lightpink",
+                       "plum", "silver", "thistle", "lightgrey", "salmon"]+['steelblue', "dodgerblue", "silver", "skyblue", "lightsteelblue", "dodgerblue", "lightpink",
+                       "plum", "silver", "thistle", "lightgrey", "salmon"]+['steelblue', "dodgerblue", "silver", "skyblue", "lightsteelblue", "dodgerblue", "lightpink",
+                       "plum", "silver", "thistle", "lightgrey", "salmon"]+['steelblue', "dodgerblue", "silver", "skyblue", "lightsteelblue", "dodgerblue", "lightpink",
+                       "plum", "silver", "thistle", "lightgrey", "salmon"]
             ))]
 
         return go.Figure(data, layout={"paper_bgcolor": '#eff5f5'})
